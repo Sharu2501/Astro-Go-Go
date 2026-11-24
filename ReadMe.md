@@ -11,3 +11,10 @@ spots-service → PostgreSQL
 
 ## Services
 - `ephemeris-service` : positions des planètes, phase de la Lune
+
+## Image Docker
+
+```bash
+docker build -t shxru/astrogo-ephemeris:1.0 ./ephemeris-service
+docker push shxru/astrogo-ephemeris:1.0
+```
