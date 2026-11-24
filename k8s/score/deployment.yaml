@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: score-deployment
+  labels:
+    app: score
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: score
+  template:
+    metadata:
+      labels:
+        app: score
+    spec:
+      containers:
+        - name: score
+          image: shxru/astrogo-score:1.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+            - name: EPHEMERIS_URL
+              value: "http://ephemeris-service"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
