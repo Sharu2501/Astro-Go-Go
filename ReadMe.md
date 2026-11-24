@@ -18,3 +18,13 @@ spots-service → PostgreSQL
 docker build -t shxru/astrogo-ephemeris:1.0 ./ephemeris-service
 docker push shxru/astrogo-ephemeris:1.0
 ```
+
+## Lancer sur Minikube
+
+```bash
+minikube start --driver=docker
+kubectl apply -f k8s/ephemeris/
+kubectl get pods
+kubectl port-forward svc/ephemeris-service 8080:80
+curl "http://localhost:8080/moon?lat=48.85&lon=2.35"
+```
