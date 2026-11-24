@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: ephemeris-service
 spec:
-  type: NodePort
+  type: ClusterIP
   selector:
     app: ephemeris
   ports:
