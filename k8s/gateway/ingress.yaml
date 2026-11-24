@@ -17,3 +17,10 @@ spec:
                 name: ephemeris-service
                 port:
                   number: 80
+          - path: /api/score(/|$)(.*)
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: score-service
+                port:
+                  number: 80
