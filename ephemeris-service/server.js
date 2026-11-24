@@ -2,25 +2,20 @@ import express from 'express';
 import * as Astronomy from 'astronomy-engine';
 
 const app = express();
+app.disable('x-powered-by');
 const PORT = process.env.PORT || 3000;
 
 const PLANETS = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn'];
 const MIN_ALTITUDE = 5;
 
 function parseParams(req) {
-    const lat = parseFloat(req.query.lat);
-    const lon = parseFloat(req.query.lon);
+    const lat = Number.parseFloat(req.query.lat);
+    const lon = Number.parseFloat(req.query.lon);
     const date = req.query.date ? new Date(req.query.date) : new Date();
 
-    if (!Number.isFinite(lat) || lat < -90 || lat > 90) {
-        return { error: 'lat doit être un nombre entre -90 et 90' };
-    }
-    if (!Number.isFinite(lon) || lon < -180 || lon > 180) {
-        return { error: 'lon doit être un nombre entre -180 et 180' };
-    }
-    if (isNaN(date.getTime())) {
-        return { error: 'date invalide (format ISO attendu, ex: 2026-11-24T21:00:00Z)' };
-    }
+    if (!Number.isFinite(lat) || lat < -90 || lat > 90) return { error: 'lat invalide' };
+    if (!Number.isFinite(lon) || lon < -180 || lon > 180) return { error: 'lon invalide' };
+    if (Number.isNaN(date.getTime())) return { error: 'date invalide (ISO attendu)' };
     return { lat, lon, date };
 }
 

@@ -14,9 +14,10 @@ spec:
       labels:
         app: ephemeris
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: ephemeris
-          image: shxru/astrogo-ephemeris:1.0
+          image: shxru/astrogo-ephemeris:1.1
           ports:
             - containerPort: 3000
           env:
@@ -38,6 +39,8 @@ spec:
             requests:
               cpu: 50m
               memory: 64Mi
+              ephemeral-storage: 100Mi
             limits:
               cpu: 200m
               memory: 128Mi
+              ephemeral-storage: 200Mi

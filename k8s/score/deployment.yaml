@@ -14,9 +14,10 @@ spec:
       labels:
         app: score
     spec:
+      automountServiceAccountToken: false
       containers:
         - name: score
-          image: shxru/astrogo-score:1.1
+          image: shxru/astrogo-score:1.2
           ports:
             - containerPort: 3000
           env:
@@ -40,6 +41,8 @@ spec:
             requests:
               cpu: 50m
               memory: 64Mi
+              ephemeral-storage: 100Mi
             limits:
               cpu: 200m
               memory: 128Mi
+              ephemeral-storage: 200Mi

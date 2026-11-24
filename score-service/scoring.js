@@ -28,7 +28,10 @@ export function computeScore({ cloudCover, isNight, moon, planets }) {
         WEIGHTS.clouds * clouds + WEIGHTS.moon * moonScore + WEIGHTS.planets * planetScore
     );
 
-    const verdict = score >= 70 ? 'GO' : score >= 40 ? 'MOYEN' : 'NO-GO';
+    let verdict;
+    if (score >= 70) verdict = 'GO';
+    else if (score >= 40) verdict = 'MOYEN';
+    else verdict = 'NO-GO';
 
     return {
         score,
