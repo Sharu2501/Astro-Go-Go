@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ephemeris-deployment
+  labels:
+    app: ephemeris
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ephemeris
+  template:
+    metadata:
+      labels:
+        app: ephemeris
+    spec:
+      containers:
+        - name: ephemeris
+          image: shxru/astrogo-ephemeris:1.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: PORT
+              value: "3000"
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 3000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
