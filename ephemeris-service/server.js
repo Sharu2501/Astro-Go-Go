@@ -58,6 +58,36 @@ app.get('/planets', (req, res) => {
     });
 });
 
+function moonPhaseName(angle) {
+    if (angle < 22.5 || angle >= 337.5) return 'Nouvelle Lune';
+    if (angle < 67.5) return 'Premier croissant';
+    if (angle < 112.5) return 'Premier quartier';
+    if (angle < 157.5) return 'Gibbeuse croissante';
+    if (angle < 202.5) return 'Pleine Lune';
+    if (angle < 247.5) return 'Gibbeuse décroissante';
+    if (angle < 292.5) return 'Dernier quartier';
+    return 'Dernier croissant';
+}
+
+app.get('/moon', (req, res) => {
+    const p = parseParams(req);
+    if (p.error) return res.status(400).json({ error: p.error });
+
+    const observer = new Astronomy.Observer(p.lat, p.lon, 0);
+    const angle = Astronomy.MoonPhase(p.date);
+    const illum = Astronomy.Illumination('Moon', p.date);
+    const pos = positionOf('Moon', p.date, observer);
+
+    res.json({
+        date: p.date.toISOString(),
+        phase: moonPhaseName(angle),
+        phaseAngle: Number(angle.toFixed(1)),
+        illumination: Number((illum.phase_fraction * 100).toFixed(1)),
+        altitude: Number(pos.altitude.toFixed(1)),
+        visible: pos.altitude > 0
+    });
+});
+
 app.listen(PORT, () => {
     console.log(`ephemeris-service écoute sur le port ${PORT}`);
 });
